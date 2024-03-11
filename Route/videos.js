@@ -5,7 +5,7 @@ const placeholderImg = "/images/Upload-video-preview.jpg";
 const placeholderChannel = "Dalia Bennu";
 const fs = require("fs");
 const videosPath = "./data/videos.json";
-
+const videoDetailsPath = "./data/video-details.json";
 // get all videos
 router.get("/", async (req, res) => {
   fs.readFile(videosPath, "utf8", (err, data) => {
@@ -20,12 +20,23 @@ router.get("/", async (req, res) => {
 
 // route with method of getting the video details with an id
 router.get("/:id", (req, res) => {
-  const videoDetailWithId = videoDetails.find((vd) => vd.id === req.params.id);
-  if (videoDetailWithId) {
-    res.json({ data: videoDetailWithId });
-  } else {
-    res.status(404).json({ error: "Video not found" });
-  }
+  fs.readFile(videoDetailsPath, "utf8", (err, data) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send("Error reading data file");
+      return;
+    }
+    videoDetails = JSON.parse(data);
+
+    const videoDetailWithId = videoDetails.find(
+      (vd) => vd.id === req.params.id
+    );
+    if (videoDetailWithId) {
+      res.json({ data: videoDetailWithId });
+    } else {
+      res.status(404).json({ error: "Video not found" });
+    }
+  });
 });
 
 // upload a new video
