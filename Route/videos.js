@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const uniqid = require("uniqid");
-const placeholderImg = "/images/Upload-video-preview.jpg";
+const placeholderImg = "./public/images/Upload-video-preview.jpg";
 const placeholderChannel = "Dalia Bennu";
 const fs = require("fs");
 const videosPath = "./data/videos.json";
@@ -62,7 +62,7 @@ router.post("/", (req, res) => {
       id: uniqid(),
       title: req.body.title,
       channel: placeholderChannel,
-      image: placeholderImg,
+      image: req.body.imagePath,
     };
 
     // Add the new video to the list of current videos
